@@ -1,7 +1,9 @@
-import React from "react";
+import SignIn from "../components/auth/sign-in";
 
 const Dashboard = () => {
-  return <div>Dashboard</div>;
-};
+  return <div>
+    <SignIn/>
+  </div>
+}
 
-export default Dashboard;
+export default Dashboard
