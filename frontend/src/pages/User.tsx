@@ -9,10 +9,10 @@ import {
   BreadcrumbSeparator,
 } from "../components/ui/breadcrumb";
 
-const Dashboard = () => {
+const User = () => {
   return (
     <>
-      <ContentLayout title="Dashboard">
+      <ContentLayout title="User">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -22,7 +22,13 @@ const Dashboard = () => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+              <BreadcrumbLink asChild>
+                <Link to="/dashboard">Dashboard</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>User</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -32,4 +38,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default User;
