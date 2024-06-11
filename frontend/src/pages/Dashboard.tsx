@@ -1,9 +1,14 @@
-import SignIn from "../components/auth/sign-in";
+
+import { ContentLayout } from "../components/admin/content-layout";
+import Dashboard_JMS from "../components/admin/admin_pages/dashboard";
 
 const Dashboard = () => {
-  return <div>
-    <SignIn/>
-  </div>
+  return (
+    <>
+      <ContentLayout title="Dashboard"/>
+      <Dashboard_JMS/>
+    </>
+  )
 }
 
 export default Dashboard

@@ -1,11 +1,12 @@
 
-import { Label } from "../ui/label"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
-import { Link } from "react-router-dom"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 
-export function SignUp() {
+import { Input } from "../components/ui/input"
+import { Button } from "../components/ui/button"
+import { Link } from "react-router-dom"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Label } from "../components/ui/label"
+
+const SignUp = () => {
   return (
     <Card className="mx-auto max-w-sm mt-20">
       <CardHeader>
@@ -43,12 +44,12 @@ export function SignUp() {
             Create an account
           </Button>
           <Button variant="outline" className="w-full">
-            Sign up with GitHub
+            Sign up with Google
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
-          <Link to="/signin" className="underline">
+          <Link to="/" className="underline">
             Sign in
           </Link>
         </div>
@@ -56,3 +57,4 @@ export function SignUp() {
     </Card>
   )
 }
+export default SignUp
