@@ -5,6 +5,7 @@ import {
     SquarePen,
     LayoutGrid
   } from "lucide-react";
+import { ComponentType } from "react";
   
   type Submenu = {
     href: string;
@@ -16,7 +17,7 @@ import {
     href: string;
     label: string;
     active: boolean;
-    icon: any;
+    icon: ComponentType;
     submenus: Submenu[];
   }
   
