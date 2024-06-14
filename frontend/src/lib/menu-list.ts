@@ -3,9 +3,9 @@ import {
     Settings,
     Bookmark,
     SquarePen,
-    LayoutGrid
+    LayoutGrid,
+    LucideIcon
   } from "lucide-react";
-import { ComponentType } from "react";
   
   type Submenu = {
     href: string;
@@ -17,7 +17,7 @@ import { ComponentType } from "react";
     href: string;
     label: string;
     active: boolean;
-    icon: ComponentType;
+    icon: LucideIcon;
     submenus: Submenu[];
   }
   
