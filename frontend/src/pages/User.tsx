@@ -1,11 +1,101 @@
+import { useEffect, useState } from "react";
+import { Users, columnsUser } from "../components/admin/admin_pages/table/columns_user";
 import { ContentLayout } from "../components/admin/content-layout";
+import { DataTable } from "../components/admin/admin_pages/table/data-table_user";
+
+async function getData(): Promise<Users[]> {
+    
+  return [
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    {
+      id: "728ed52f",
+      Username: "Example",
+      role: "Guest",
+      refreshToken: " ",
+      token: " ",
+      createdAt: " ",
+      createBy: " "
+    },
+    // ...
+  ]
+}
 
 const User = () => {
+
+  const [data, setData] = useState<Users[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getData();
+            setData(result);
+            setLoading(false);
+        };
+
+        fetchData();
+    }, []);
+
   return (
-    <>
+    <div>
       <ContentLayout title="User"/>
-      Dashboard side par
-    </>
+      <div className="container mt-10">
+        <DataTable columns={columnsUser} data={data}/>
+      </div>
+      
+    </div>
   )
 }
 

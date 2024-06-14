@@ -5,8 +5,8 @@ import JMS from "./components/admin/jms_layout";
 import Dashboard from "./pages/Dashboard";
 import User from "./pages/User";
 import Inmates from "./pages/Inmates";
-import Visitors from "./pages/Visitors";
 import Settings from "./pages/Settings";
+import Visitors from "./pages/Visitors";
 
 function App() {
   return (
