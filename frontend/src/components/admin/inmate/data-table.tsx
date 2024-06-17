@@ -1,14 +1,17 @@
-"use client";
-
+import * as React from "react";
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  ColumnFiltersState,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
-  VisibilityState,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -18,90 +21,72 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../ui/table";
-import React from "react";
-import { Button } from "../../../ui/button";
-import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../ui/select";
+} from "../../ui/table";
+import { Input } from "../../ui/input";
+import { DataTablePaginations } from "../data-table-paginations";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export type PaginationState = {
-  pageIndex: number;
-  pageSize: number;
-};
-
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [rowSelection, setRowSelection] = React.useState({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     state: {
-      columnFilters,
+      sorting,
       columnVisibility,
+      rowSelection,
+      columnFilters,
     },
     initialState: {
       pagination: {
-        pageSize: 20,
+        pageSize: 8,
       },
     },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
   return (
-    <div>
-      <div className="flex justify-end">
-        <Select
-          value={String(table.getState().pagination.pageSize)}
-          onValueChange={(value: any) => {
-            table.setPageSize(Number(value));
-          }}
-        >
-          <SelectTrigger className="w-28">
-            <SelectValue placeholder="Select rows" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {[20, 10, 30].map((pageSize) => (
-                <SelectItem key={pageSize} value={String(pageSize)}>
-                  Show {pageSize}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="rounded-md border mt-8">
+    <div className="space-y-4">
+      <Input
+        placeholder="Search names..."
+        value={(table.getColumn("fullname")?.getFilterValue() as string) ?? ""}
+        onChange={(event: any) =>
+          table.getColumn("fullname")?.setFilterValue(event.target.value)
+        }
+        className="max-w-xs"
+      />
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} colSpan={header.colSpan}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -137,31 +122,14 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Create an appointment first.
+                  No results.
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          <ArrowLeftIcon />
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          <ArrowRightIcon />
-        </Button>
-      </div>
+      <DataTablePaginations table={table} />
     </div>
   );
 }
