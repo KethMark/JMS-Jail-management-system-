@@ -6,8 +6,6 @@ import {
   CardHeader,
 } from "../../ui/card";
 
-import { Badge } from "../../ui/badge";
-
 import {
   Table,
   TableBody,
@@ -97,13 +95,8 @@ const Dashboard_JMS = () => {
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">Parents</TableCell>
                 <TableCell className="hidden sm:table-cell"></TableCell>
-                {/* <TableCell className="hidden sm:table-cell">
-                  <Badge className="text-xs" variant="secondary">
-                    Fulfilled
-                  </Badge>
-                </TableCell> */}
                 <TableCell className="hidden md:table-cell"></TableCell>
-                <TableCell className="hidden md:table-cell"></TableCell>
+                <TableCell className="sm:table-cell"></TableCell>
               </TableRow>
             </TableBody>
           </Table>

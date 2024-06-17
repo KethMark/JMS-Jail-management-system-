@@ -1,6 +1,6 @@
 
 import { ContentLayout } from "../components/admin/content-layout";
-import Dashboard_JMS from "../components/admin/admin_pages/dashboard";
+import Dashboard_JMS from "../components/admin/dashboard/dashboard";
 
 const Dashboard = () => {
   return (
