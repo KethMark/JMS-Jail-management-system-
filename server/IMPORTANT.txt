@@ -1,0 +1,12 @@
+
+To run the backend in Docker
+
+-> cd server
+-> docker-compose up --build
+
+### to open MySQL database in CLI ###
+
+-> docker container ls
+-> docker exec -it < mysql_latest container-d> /bin/bash
+
+-> mysql -ppassword123
