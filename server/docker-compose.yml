@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  mysql_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_PASSWORD: ${PASSWORD}
+      HOST: ${HOST} # This is not a standard MySQL environment variable, use it for your own reference
+      command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./jms.sql:/docker-entrypoint-initdb.d/jms.sql # Mount your SQL file for initialization
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"
+    depends_on:
+      - mysql_db
+    environment:
+      HOST: ${HOST} # Use the service name as the hostname
+      USER_NAME: ${USER_NAME}
+      PASSWORD: ${PASSWORD}
+      DATABASE: ${DATABASE}
+    env_file:
+      - .env
+volumes:
+  mysql-data:

@@ -27,6 +27,9 @@ app.use(bodyParser.json());
 //routes here with middleware
 app.use("/api/v1/user", authRoute);
 
+dbConnect().then((res) => {
+  console.log("db: ", res.config.database);
+});
 const server = http.createServer(app);
 
 server.listen(port, () => {
