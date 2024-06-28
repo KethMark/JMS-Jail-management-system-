@@ -1,17 +1,58 @@
 import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
 import { Button } from "../../ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../../ui/dialog";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { visitorSchema } from "../../../lib/formschema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { visitorPOST } from "../../../lib/api";
+import { toast } from "sonner";
+import { Visitors } from "../../../lib/type";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../../ui/form";
 
 const Visitors_JMS = () => {
+  const queryClient = useQueryClient()
+  const form = useForm<z.infer<typeof visitorSchema>>({
+    resolver: zodResolver(visitorSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      relationship: '',
+      visitdate: '',
+      visitTime: '',
+      duration: ''
+    }
+  })
+
+  const mutation = useMutation({
+    mutationFn: visitorPOST,
+    onSuccess: () => {
+      toast.success("Congratulations", {
+        description: "successfully create the data"
+      })
+      form.reset()
+      queryClient.invalidateQueries({queryKey: ["visitor"]})
+    },
+    onError: () => {
+      toast.error("Their's something wrong", {
+        description: "check you network connection"
+      })
+    },
+    retry: 5
+  })
+
+  const onSubmit = (data: Visitors) => {
+    mutation.mutate(data)
+  }
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-end">
@@ -26,35 +67,100 @@ const Visitors_JMS = () => {
             <DialogHeader>
               <DialogTitle>Create Appointment</DialogTitle>
             </DialogHeader>
-            <div className="grid lg:grid-cols-2 gap-4">
-              <div className="grid gap-4">
-                <Label>First Name</Label>
-                <Input placeholder="First Name" required />
-              </div>
-              <div className="grid gap-4">
-                <Label>Last Name</Label>
-                <Input placeholder="Last Name" required />
-              </div>
-              <div className="grid gap-4">
-                <Label>Relation to Inmate</Label>
-                <Input placeholder="Cousin" required />
-              </div>
-              <div className="grid gap-4">
-                <Label>Visit Date</Label>
-                <Input placeholder="example: 6/11/24" required />
-              </div>
-              <div className="grid gap-4">
-                <Label>Visit Time</Label>
-                <Input placeholder="example: 5:10 pm" required />
-              </div>
-              <div className="grid gap-4">
-                <Label>Duration</Label>
-                <Input placeholder="2hrs" required />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button>Submit</Button>
-            </DialogFooter>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="grid lg:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>First Name</FormLabel>
+                          <Input placeholder="First Name" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>Last Name</FormLabel>
+                          <Input placeholder="Last Name" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="relationship"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>Relationship</FormLabel>
+                          <Input placeholder="Relationship" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="visitdate"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>Visit Date</FormLabel>
+                          <Input placeholder="Visit Date" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="visitTime"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>Visit Time</FormLabel>
+                          <Input placeholder="Visit Time" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({field}) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="grid gap-4">
+                          <FormLabel>Duration</FormLabel>
+                          <Input placeholder="Duration" {...field}/>
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  disabled={mutation.isPending}
+                  className="mt-8"
+                >
+                  Submit
+                </Button>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>

@@ -7,6 +7,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoute from "./routers/authRoute";
 import { dbConnect } from "./database/config";
+import inmate from "./routers/inmate";
+import visitors from "./routers/visitors"
 
 dotenv.config();
 
@@ -17,6 +19,7 @@ console.log(process.env.PORT);
 app.use(
   cors({
     credentials: true,
+    origin: 'http://localhost:5173'
   })
 );
 
@@ -26,12 +29,17 @@ app.use(bodyParser.json());
 
 //routes here with middleware
 app.use("/api/v1/user", authRoute);
+app.use("/api/v2/inmate", inmate);
+app.use("/api/v3/visitors", visitors);
 
-dbConnect().then((res) => {
-  console.log("db: ", res.config.database);
-});
 const server = http.createServer(app);
 
-server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}/`);
-});
+dbConnect()
+  .then(() => {
+    server.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}/`);
+    });
+  })
+  .catch(() => {
+    console.log("Error connecting to database");
+  });

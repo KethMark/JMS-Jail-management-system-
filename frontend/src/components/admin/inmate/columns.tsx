@@ -1,28 +1,15 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "./data-table-header";
 import { cases, genders, numbers } from "../../../lib/data";
+import { Inmates } from "../../../lib/type";
 
-export type Inmate = {
-  id: string;
-  fullname: string;
-  dateofbirth: string;
-  age: string;
-  gender: string;
-  height: string;
-  bodymarks: string;
-  case: string;
-  sentenceStartDate: string;
-  sentenceEndDate: string;
-  cellNumber: string;
-};
-
-export const columnsInmate: ColumnDef<Inmate>[] = [
+export const columnsInmate: ColumnDef<Inmates>[] = [
   {
     accessorKey: "fullname",
     header: "Fullname",
   },
   {
-    accessorKey: "dateofbirth",
+    accessorKey: "dateOfBirth",
     header: "Date of Birth",
   },
   {
@@ -55,17 +42,17 @@ export const columnsInmate: ColumnDef<Inmate>[] = [
     header: "Height",
   },
   {
-    accessorKey: "bodymarks",
+    accessorKey: "bodyMarks",
     header: "Body Marks",
   },
   {
-    accessorKey: "case",
+    accessorKey: "crime",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title={"Case"} props={cases}/>
     ),
     cell: ({ row }) => {
       const inmate = cases.find(
-        (inmate) => inmate.value === row.getValue("case")
+        (inmate) => inmate.value === row.getValue("crime")
       )
 
       if(!inmate) {

@@ -1,16 +1,15 @@
-
 //Add more data to filter out
 
 export const genders = [
-    {
-      label: "Female",
-      value: "Female",
-    },
-    {
-      label: "Male",
-      value: "Male",
-    },
-]
+  {
+    label: "Female",
+    value: "Female",
+  },
+  {
+    label: "Male",
+    value: "Male",
+  },
+];
 
 export const cases = [
   {
@@ -20,8 +19,8 @@ export const cases = [
   {
     label: "Bullying",
     value: "Bullying",
-  }
-]
+  },
+];
 
 export const numbers = [
   {
@@ -31,5 +30,5 @@ export const numbers = [
   {
     label: "2",
     value: "2",
-  }
-]
+  },
+];

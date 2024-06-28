@@ -1,119 +1,32 @@
-import { useEffect, useState } from "react";
 import Visitors_JMS from "../components/admin/visitors/Visitors";
 import {
-  Visitor,
   columnsVisitors,
-} from "../components/admin/visitors/columns_visi";
+} from "../components/admin/visitors/columns";
 import { ContentLayout } from "../components/admin/content-layout";
 import { DataTable } from "../components/admin/visitors/data-table";
+import { useQuery } from "@tanstack/react-query";
+import { visitorGET } from "../lib/api";
 
-async function getData(): Promise<Visitor[]> {
-  return [
-    {
-      id: "728ed52f",
-      fullname: "User",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    {
-      id: "728ed52f",
-      fullname: "Example",
-      relation: "Cousin",
-      visitDate: "6/12/2024",
-      visitTime: "12.24 pm",
-      duration: "2hrs",
-      status: true,
-    },
-    // ...
-  ];
-}
 
 const Visitors = () => {
-  const [data, setData] = useState<Visitor[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getData();
-      setData(result);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  const { data: status, isLoading } = useQuery({
+    queryKey: ["visitor"],
+    queryFn: visitorGET
+  })
 
   return (
     <div>
       <ContentLayout title="Visitors" />
       <div className="container py-6 space-y-2">
         <Visitors_JMS />
-        <DataTable columns={columnsVisitors} data={data} />
+        {isLoading? (
+          <div>Loading...</div>
+        ): (
+          status && (
+            <DataTable columns={columnsVisitors} data={status} />
+          )
+        )}
       </div>
     </div>
   );
