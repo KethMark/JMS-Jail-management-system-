@@ -1,11 +1,15 @@
-import { Inmate } from "../models/jms";
 import { Response, Request } from "express"
 import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate } from "../database/inmate"
 import { validateInmate } from "../database/schema/jms";
 
 export async function getInmates(req: Request, res: Response) {
-  const inmate = await inmates()
-  res.send(inmate)
+  try {
+    const inmate = await inmates()
+    res.send(inmate)
+  } catch (error) {
+    res.status(404).send("Their's something wrong")
+    console.log(error)
+  }
 }
 
 export async function createInmates(req: Request, res: Response) {

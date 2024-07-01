@@ -3,8 +3,13 @@ import { visitors, visitorsId, visitorsCreate, visitorsDelete, visitorsUpdate } 
 import { validateVisitor } from "../database/schema/jms";
 
 export async function getVisitors(req: Request , res: Response) {
+  try {
     const visitor = await visitors()
     res.send(visitor)
+  } catch (error) {
+    res.status(404).send("Their's something wrong")
+    console.log(error)
+  }
 }
 
 export async function createVisitors(req: Request , res: Response) {

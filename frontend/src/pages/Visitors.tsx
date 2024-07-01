@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { visitorGET } from "../lib/api";
 
 const Visitors = () => {
+  
   const { data: status, isLoading } = useQuery({
     queryKey: ["visitor"],
     queryFn: visitorGET,
