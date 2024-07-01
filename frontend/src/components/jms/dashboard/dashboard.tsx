@@ -16,10 +16,18 @@ import {
 } from "../../ui/table";
 import { Users } from "lucide-react";
 import { FrameIcon } from "@radix-ui/react-icons";
-
-//Overview of dashboard, changes will coming...
+import { useQuery } from "@tanstack/react-query";
+import { visitorGET } from "../../../lib/api";
 
 const Dashboard_JMS = () => {
+
+  const { data: status } = useQuery({
+    queryKey: ["VisitorDashboard"],
+    queryFn: visitorGET
+  })
+
+  
+
   return (
     <div className="container space-y-4 py-4">
       <div className=" grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
@@ -85,19 +93,19 @@ const Dashboard_JMS = () => {
                 <TableHead className="hidden sm:table-cell">Relation</TableHead>
                 <TableHead className="hidden sm:table-cell">Visit Date</TableHead>
                 <TableHead className="hidden md:table-cell">Visit Time</TableHead>
-                <TableHead className="text-right">Duration</TableHead>
+                <TableHead className="">Duration</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow className="bg-accent">
-                <TableCell>
-                  <div className="font-medium">Liam Johnson</div>
-                </TableCell>
-                <TableCell className="hidden sm:table-cell">Parents</TableCell>
-                <TableCell className="hidden sm:table-cell"></TableCell>
-                <TableCell className="hidden md:table-cell"></TableCell>
-                <TableCell className="sm:table-cell"></TableCell>
-              </TableRow>
+              {status?.map((status) => (
+                <TableRow>
+                  <TableCell>{status.fullname}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{status.relationship}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{status.visitdate}</TableCell>
+                  <TableCell className="hidden md:table-cell">{status.visitTime}</TableCell>
+                  <TableCell className="sm:table-cell">{status.duration}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
