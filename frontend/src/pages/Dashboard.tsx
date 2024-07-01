@@ -1,14 +1,13 @@
-
-import { ContentLayout } from "../components/admin/content-layout";
-import Dashboard_JMS from "../components/admin/dashboard/dashboard";
+import { ContentLayout } from "../components/jms/content-layout";
+import Dashboard_JMS from "../components/jms/dashboard/dashboard";
 
 const Dashboard = () => {
   return (
     <>
-      <ContentLayout title="Dashboard"/>
-      <Dashboard_JMS/>
+      <ContentLayout title="Dashboard" />
+      <Dashboard_JMS />
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

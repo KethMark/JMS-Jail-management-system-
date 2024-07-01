@@ -1,19 +1,17 @@
-
-
-import { Button } from "../../components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
+import { Button } from "../ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  TooltipProvider
-} from "../../components/ui/tooltip";
+  TooltipProvider,
+} from "../ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuTrigger
-} from "../../components/ui/dropdown-menu";
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export function UserNav() {
   return (

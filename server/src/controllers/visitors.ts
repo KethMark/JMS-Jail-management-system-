@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
-import { Visitors } from "../models/jms";
-import { visitors, visitorsId, visitorsCreate, visitorsDelete, visitorsUpdate } from "../database/config";
+import { visitors, visitorsId, visitorsCreate, visitorsDelete, visitorsUpdate } from "../database/visitor";
+import { validateVisitor } from "../database/schema/jms";
 
 export async function getVisitors(req: Request , res: Response) {
     const visitor = await visitors()
@@ -8,7 +8,7 @@ export async function getVisitors(req: Request , res: Response) {
 }
 
 export async function createVisitors(req: Request , res: Response) {
-    const newVisitor: Visitors = req.body
+    const newVisitor: validateVisitor = req.body
     const visitor = await visitorsCreate(newVisitor)
     res.send(visitor)
 }
@@ -27,7 +27,7 @@ export async function deleteVisitors(req: Request , res: Response) {
 
 export async function updateVisitors(req: Request , res: Response) {
     const id = req.params.visitorsId
-    const updateVisitor: Visitors = req.body
+    const updateVisitor: validateVisitor = req.body
     const visitor = await visitorsUpdate(updateVisitor, id)
     res.send(visitor)
 }

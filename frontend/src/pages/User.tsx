@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Users, columnsUser } from "../components/admin/user/columns_user";
-import { ContentLayout } from "../components/admin/content-layout";
-import { DataTable } from "../components/admin/user/data-table";
+import { Users, columnsUser } from "../components/jms/user/columns_user";
+import { ContentLayout } from "../components/jms/content-layout";
+import { DataTable } from "../components/jms/user/data-table";
 
 async function getData(): Promise<Users[]> {
   return [

@@ -1,6 +1,7 @@
 import { Inmate } from "../models/jms";
-import { Response, Request, NextFunction } from "express"
-import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate } from "../database/config"
+import { Response, Request } from "express"
+import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate } from "../database/inmate"
+import { validateInmate } from "../database/schema/jms";
 
 export async function getInmates(req: Request, res: Response) {
   const inmate = await inmates()
@@ -8,7 +9,7 @@ export async function getInmates(req: Request, res: Response) {
 }
 
 export async function createInmates(req: Request, res: Response) {
-  const newInmate: Inmate = req.body
+  const newInmate: validateInmate = req.body
   const inmate = await inmatesCreate(newInmate)
   res.send(inmate)
 }
@@ -27,7 +28,7 @@ export async function deleteInmates(req: Request, res: Response) {
 
 export async function updateInmates(req: Request, res: Response) {
   const id = req.params.inmatesId
-  const updateInmate: Inmate = req.body
+  const updateInmate: validateInmate = req.body
   const inmate = await inmatesUpdate(updateInmate, id)
   res.send(inmate)
 }
