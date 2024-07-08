@@ -1,15 +1,19 @@
 import express from "express";
 import * as inmateControllers from '../controllers/inmate'
+import authMiddleware from "../middleware/authMiddleware";
 
 const router = express.Router();
 
 router.route('/')
-      .get(inmateControllers.getInmates )
-      .post(inmateControllers.createInmates)
+      .get(authMiddleware, inmateControllers.getInmates )
+      .post(authMiddleware, inmateControllers.createInmates)
+
+router.route('/counts')
+      .get(authMiddleware, inmateControllers.getCountInmates)
       
 router.route('/:inmatesId')
-      .get(inmateControllers.getInmate)
-      .put(inmateControllers.updateInmates)
-      .delete(inmateControllers.deleteInmates)
+      .get(authMiddleware, inmateControllers.getInmate)
+      .put(authMiddleware, inmateControllers.updateInmates)
+      .delete(authMiddleware, inmateControllers.deleteInmates)
 
 export default router;

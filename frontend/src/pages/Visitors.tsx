@@ -2,15 +2,11 @@ import Visitors_JMS from "../components/jms/visitors/Visitors";
 import { columnsVisitors } from "../components/jms/visitors/columns";
 import { ContentLayout } from "../components/jms/content-layout";
 import { DataTable } from "../components/jms/visitors/data-table";
-import { useQuery } from "@tanstack/react-query";
-import { visitorGET } from "../lib/api";
+import { Visitor } from "../routes/query";
 
 const Visitors = () => {
   
-  const { data: status, isLoading } = useQuery({
-    queryKey: ["visitor"],
-    queryFn: visitorGET,
-  });
+  const { status, isLoading  } = Visitor()
 
   return (
     <div>

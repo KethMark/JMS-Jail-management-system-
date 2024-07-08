@@ -39,8 +39,7 @@ const Visitors_JMS = () => {
         description: "successfully create the data"
       })
       form.reset()
-      queryClient.invalidateQueries({queryKey: ["visitor"]})
-      queryClient.invalidateQueries({queryKey: ["VisitorDashboard"]})
+      queryClient.invalidateQueries({queryKey: ["Visitor"]})
     },
     onError: () => {
       toast.error("Their's something wrong", {

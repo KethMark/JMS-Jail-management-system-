@@ -1,6 +1,8 @@
 import { Response, Request } from "express"
-import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate } from "../database/inmate"
+import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate, inmatesCount } from "../database/inmate"
 import { validateInmate } from "../database/schema/jms";
+
+// pov: 
 
 export async function getInmates(req: Request, res: Response) {
   try {
@@ -53,6 +55,15 @@ export async function updateInmates(req: Request, res: Response) {
     res.send(inmate)
   } catch (error) {
     res.status(404).send("Their's something wrong")
+    console.log(error)
+  }
+}
+
+export async function getCountInmates(req: Request, res: Response) {
+  try {
+    const inmates = await inmatesCount()
+    res.send(inmates)
+  } catch (error) {
     console.log(error)
   }
 }

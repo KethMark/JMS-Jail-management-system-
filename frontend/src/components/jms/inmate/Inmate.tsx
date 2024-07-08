@@ -44,7 +44,7 @@ const Inmate_JMS = () => {
         description: "successfully create the data"
       })
       form.reset()
-      queryClient.invalidateQueries({queryKey: ["inmate"]})
+      queryClient.invalidateQueries({queryKey: ["Inmate"]})
     }, 
     onError: () => {
       toast.error("Their's something wrong", {

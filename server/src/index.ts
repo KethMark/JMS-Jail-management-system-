@@ -9,13 +9,13 @@ import authRoute from "./routers/authRoute";
 import { dbConnect } from "./database/config";
 import inmate from "./routers/inmate";
 import visitors from "./routers/visitors"
+import  authentication  from "./routers/authentication";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8181;
 
-console.log(process.env.PORT);
 app.use(
   cors({
     credentials: true,
@@ -31,6 +31,7 @@ app.use(bodyParser.json());
 app.use("/api/v1/user", authRoute);
 app.use("/api/v2/inmate", inmate);
 app.use("/api/v3/visitors", visitors);
+app.use("/api/v4/authentication", authentication)
 
 const server = http.createServer(app);
 

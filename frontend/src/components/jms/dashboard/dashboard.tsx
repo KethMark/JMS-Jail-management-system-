@@ -16,17 +16,11 @@ import {
 } from "../../ui/table";
 import { Users } from "lucide-react";
 import { FrameIcon } from "@radix-ui/react-icons";
-import { useQuery } from "@tanstack/react-query";
-import { visitorGET } from "../../../lib/api";
+import { Visitor } from "../../../routes/query";
 
 const Dashboard_JMS = () => {
 
-  const { data: status } = useQuery({
-    queryKey: ["VisitorDashboard"],
-    queryFn: visitorGET
-  })
-
-  
+  const { status} = Visitor()
 
   return (
     <div className="container space-y-4 py-4">
@@ -37,7 +31,7 @@ const Dashboard_JMS = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
+            <div className="text-2xl font-bold"></div>
             <p className="text-xs text-muted-foreground">
               +180.1% from last month
             </p>

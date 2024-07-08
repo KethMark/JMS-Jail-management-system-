@@ -1,18 +1,3 @@
-// export type Inmate = {
-//   id?: number;
-//   firstName: string;
-//   lastName:string;
-//   dateOfBirth: string;
-//   age: string;
-//   gender: string;
-//   height: string;
-//   bodyMarks: string;
-//   crime: string;
-//   sentenceStartDate: string;
-//   sentenceEndDate: string;
-//   cellNumber: string;
-//   fullname: string
-// };
 
 export type Inmates = {
   id?: number;
@@ -27,7 +12,7 @@ export type Inmates = {
   sentenceStartDate: string;
   sentenceEndDate: string;
   cellNumber: string;
-  fullname?: string
+  fullname?: string;
 };
 
 export type Visitors = {
