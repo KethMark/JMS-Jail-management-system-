@@ -1,5 +1,15 @@
 import axios from 'axios'
-import { Inmates, Visitors } from './type'
+import { Inmates, Visitors, User } from './type'
+
+//signin
+
+export const signInPOST = (data: User): Promise<User> =>
+    axios.post("/api/v4/authentication/login", data).then((res) => res.data)
+
+//sign-up
+
+export const signUpPOST = (data: User): Promise<User> =>
+    axios.post("/api/v4/authentication/register", data).then((res) => res.data)
 
 //Inmates
 

@@ -1,6 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
 import { inmateGET, visitorGET } from "../lib/api"
 
+export const SingIn = () => {
+  const {} = useQuery({
+    queryKey: [""],
+    queryFn: () => inmateGET(),
+  })
+}
 
 export const Visitor = () => {
 

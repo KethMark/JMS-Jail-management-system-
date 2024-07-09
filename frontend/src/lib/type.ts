@@ -1,3 +1,12 @@
+export type User = {
+  id?: number;
+  firstName?: string;
+  lastName?: string;
+  password: string;
+  email: string;
+  refreshToken?: string;
+  token?: string;
+}
 
 export type Inmates = {
   id?: number;

@@ -5,14 +5,14 @@ import authMiddleware from "../middleware/authMiddleware";
 const router = express.Router();
 
 router.route('/')
-      .get(authMiddleware, inmateControllers.getInmates )
+      .get( inmateControllers.getInmates )
       .post(authMiddleware, inmateControllers.createInmates)
 
 router.route('/counts')
-      .get(authMiddleware, inmateControllers.getCountInmates)
+      .get( inmateControllers.getCountInmates)
       
 router.route('/:inmatesId')
-      .get(authMiddleware, inmateControllers.getInmate)
+      .get( inmateControllers.getInmate)
       .put(authMiddleware, inmateControllers.updateInmates)
       .delete(authMiddleware, inmateControllers.deleteInmates)
 

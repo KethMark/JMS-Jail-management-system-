@@ -92,7 +92,7 @@ const Dashboard_JMS = () => {
             </TableHeader>
             <TableBody>
               {status?.map((status) => (
-                <TableRow>
+                <TableRow key={status.id}>
                   <TableCell>{status.fullname}</TableCell>
                   <TableCell className="hidden sm:table-cell">{status.relationship}</TableCell>
                   <TableCell className="hidden sm:table-cell">{status.visitdate}</TableCell>

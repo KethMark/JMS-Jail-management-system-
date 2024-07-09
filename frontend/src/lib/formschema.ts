@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const userSchema = z.object({
+  id: z.number().int().min(1).optional(),
+  firstName: z.string().min(2).optional(),
+  lastName: z.string().min(2).optional(),
+  email: z.string().email(),
+  password: z.string().min(1),
+  token: z.string().min(1).optional(),
+  refreshToken:z.string().min(1).optional()
+}) 
+
 export const inmateSchema = z.object({
   id: z.number().int().min(1).optional(),
   firstName: z.string().min(2),
