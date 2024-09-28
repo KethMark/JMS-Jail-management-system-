@@ -16,11 +16,15 @@ import {
 } from "../../ui/table";
 import { Users } from "lucide-react";
 import { FrameIcon } from "@radix-ui/react-icons";
-import { Visitor } from "../../../routes/query";
+import { useQuery } from "@tanstack/react-query";
+import { visitorGET } from "../../../lib/api";
 
 const Dashboard_JMS = () => {
 
-  const { status} = Visitor()
+  const { data: status } = useQuery({
+    queryKey: ["Visitor"],
+    queryFn: visitorGET
+  })
 
   return (
     <div className="container space-y-4 py-4">

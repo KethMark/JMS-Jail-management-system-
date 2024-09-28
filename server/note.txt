@@ -1,0 +1,279 @@
+import type { Response, NextFunction, Request } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken"
+
+declare module "express-serve-static-core" {
+  interface Request {
+    user: {
+      id: string
+    }
+  }
+}
+
+const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    console.log("Extracted token:", token);
+    
+    if(!token) {
+      console.error("No token provided");
+      return res.status(401).json({ error: 'Access token not provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.SECRET_KEY_TOKEN) as JwtPayload
+    console.log("Decoded token:", decoded);
+    req.user = { id: decoded.id }
+
+    return next()
+    
+  } catch (error) {
+    console.error("Token verification error:", error);
+    res.status(401).send('Invalid Token');
+  }
+}
+
+export default authMiddleware;
+
+
+export async function login(req: Request, res: Response) {
+  try {
+    const data: validateUser = req.body;
+
+    const { email, password } = data;
+
+    const user = await userEmail(email);
+
+    if (!user) {
+      return res.status(400).json({ message: "Email is invalid" });
+    }
+
+    const isMatch = await argon2.verify(user.password, password);
+
+    if (!isMatch) {
+      return res.status(403).json({ message: "Incorrect Password" });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+      },
+      process.env.SECRET_KEY_TOKEN,
+      {
+        expiresIn: process.env.TOKEN_EXPIRY,
+      }
+    );
+    
+    const expiresIn = process.env.TOKEN_EXPIRY;
+    console.log('Token expires in:', expiresIn);
+
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.SECRET_KEY_REFRESHTOKEN,
+      {
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      }
+    );
+
+    res.cookie("accessToken", token, {
+      httpOnly: true,
+      secure: process.env.SECURE === "true",
+    });
+
+    console.log('Response headers:', res.getHeaders());
+
+    await userUpdate(refreshToken, token, user.id);
+
+    return res.status(200).json({ message: "Login Successfull", token, refreshToken }).end();
+    
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+}
+
+
+import type { Response, NextFunction, Request } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
+
+declare module "express-serve-static-core" {
+  interface Request {
+    user: {
+      id: string;
+    };
+  }
+}
+
+const authMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const token = req.cookies.accessToken;
+
+    if (!token) {
+      return res.status(401).json({ error: "Access token not provided" });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.SECRET_KEY_TOKEN
+    ) as JwtPayload;
+
+    req.user = { id: decoded.id };
+
+    return next();
+    
+  } catch (error) {
+    console.error("Token verification error:", error);
+    res.status(401).send("Invalid Token");
+  }
+};
+
+export default authMiddleware;
+
+
+import axios from "axios";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
+
+interface AuthContextType {
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<null>>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = () => {
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return authContext;
+};
+
+const token = localStorage.getItem('token')
+
+const api = axios.create({
+  baseURL: "http://localhost:3000", //backend url of express js
+  withCredentials: true,
+  // headers: {
+  //   Authorization: `Bearer ${token}`
+  // }
+})
+
+//the reason why i can't redirect into the dashboard because i get the null in the useLayoutEffect
+
+const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setToken] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchMe = async () => {
+  //     try {
+  //       const res = await api.get("/api/v5/user/token");
+  //       console.log("Fetched token frontend: ", res.data.token)
+  //       setToken(res.data.token);
+  //       console.log("Mao ni response:", res)
+  //       console.log("Mao ni setToken:", setToken)
+  //     } catch (error) {
+  //       console.error('Error fetching token: ', error);
+  //       setToken(null);
+  //     }
+  //   };
+  //   fetchMe();
+  // }, []);
+
+  useLayoutEffect(() => {
+    const authInterceptor = api.interceptors.request.use((config) => {
+      // config.headers.Authorization =
+      //   config && token ? `Bearer ${token}` : config.headers.Authorization;
+      //   console.log("Token nis useEffect: ", token)
+      
+      return config;
+    });
+    return () => {
+      api.interceptors.request.eject(authInterceptor);
+    };
+  }, [token]);
+
+  useLayoutEffect(() => {
+    const refreshInterceptor = api.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+
+        if (
+          error.response.status === 401 &&
+          error.response.data.message === "Access token not provided"
+        ) {
+          try {
+            const response = await api.get("/api/v5/user/refreshToken");
+
+            setToken(response.data.token);
+
+            originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
+            originalRequest._retry = true;
+
+            return api(originalRequest);
+          } catch (error) {
+            setToken(null);
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      api.interceptors.response.eject(refreshInterceptor);
+    };
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ token, setToken }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+export default AuthProvider;
+
+
+// useLayoutEffect(() => {
+  //   const refreshInterceptor = api.interceptors.response.use(
+  //     (response) => response,
+  //     async (error) => {
+  //       const originalRequest = error.config;
+
+  //       if (
+  //         error.response.status === 401 &&
+  //         error.response.data.message === "Access token not provided"
+  //       ) {
+  //         try {
+  //           const response = await api.get("/api/v5/user/refreshToken");
+
+  //           setToken(response.data.token);
+
+  //           originalRequest.headers.Authorization = `Bearer ${response.data.token}`;
+  //           originalRequest._retry = true;
+
+  //           return api(originalRequest);
+  //         } catch (error) {
+  //           setToken(null);
+  //         }
+  //       }
+  //       return Promise.reject(error);
+  //     }
+  //   );
+  //   return () => {
+  //     api.interceptors.response.eject(refreshInterceptor);
+  //   };
+  // }, []);

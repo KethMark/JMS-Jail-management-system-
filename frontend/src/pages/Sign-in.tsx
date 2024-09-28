@@ -35,7 +35,7 @@ const SignIn = () => {
       toast.success("Congratulations!", {
         description: "welcome to jail management system",
       });
-      navigate("/dashboard");
+      navigate("/");
     },
     onError: () => {
       toast.error("Their's something wrong!", {

@@ -2,7 +2,6 @@ import { Response, Request } from "express"
 import { inmates, inmatesId, inmatesCreate, inmatesDelete, inmatesUpdate, inmatesCount } from "../database/inmate"
 import { validateInmate } from "../database/schema/jms";
 
-// pov: 
 
 export async function getInmates(req: Request, res: Response) {
   try {

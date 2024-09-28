@@ -10,6 +10,7 @@ import { dbConnect } from "./database/config";
 import inmate from "./routers/inmate";
 import visitors from "./routers/visitors"
 import  authentication  from "./routers/authentication";
+import user from "./routers/user"
 
 dotenv.config();
 
@@ -31,7 +32,8 @@ app.use(bodyParser.json());
 app.use("/api/v1/user", authRoute);
 app.use("/api/v2/inmate", inmate);
 app.use("/api/v3/visitors", visitors);
-app.use("/api/v4/authentication", authentication)
+app.use("/api/v4/authentication", authentication);
+app.use("/api/v5/user", user);
 
 const server = http.createServer(app);
 

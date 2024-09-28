@@ -2,11 +2,15 @@ import Inmate_JMS from "../components/jms/inmate/Inmate";
 import { columnsInmate } from "../components/jms/inmate/columns";
 import { ContentLayout } from "../components/jms/content-layout";
 import { DataTable } from "../components/jms/inmate/data-table";
-import { Inmate } from "../routes/query";
+import { inmateGET } from "../lib/api";
+import { useQuery } from "@tanstack/react-query";
 
 const Inmates = () => {
   
-  const { status, isLoading } = Inmate()
+  const { data: status, isLoading } = useQuery({
+    queryKey: ["Inmate"],
+    queryFn: inmateGET
+  })
 
   return (
     <>

@@ -5,6 +5,7 @@ import {
   userEmailExist,
   userEmail,
   userUpdate,
+  userLogout,
 } from "../database/authentication";
 import { authentication } from "../helpers/index";
 import argon2 from "argon2";
@@ -35,19 +36,29 @@ export async function login(req: Request, res: Response) {
         lastName: user.lastName,
         email: user.email,
       },
-      process.env.SECRET_KEY,
+      process.env.SECRET_KEY_TOKEN,
       {
         expiresIn: process.env.TOKEN_EXPIRY,
       }
     );
 
-    const refreshToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
-    });
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.SECRET_KEY_REFRESHTOKEN,
+      {
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
+      }
+    );
 
-    const save = await userUpdate(refreshToken, token, user.id);
+    console.log('Response headers:', res.getHeaders());
 
-    return res.status(200).json({ message: "Login Successfull", save }).end();
+    await userUpdate(refreshToken, token, user.id);
+
+    return res
+      .status(200)
+      .json({ message: "Login Successfull", token, refreshToken })
+      .end();
+
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
@@ -76,6 +87,17 @@ export async function register(req: Request, res: Response) {
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
+    return res.sendStatus(400);
+  }
+}
+
+export async function logout(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+    const user = await userLogout(id);
+    res.send(user);
+  } catch (error) {
+    console.log(error.message);
     return res.sendStatus(400);
   }
 }

@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-// pov: we can improve the validation by providing custom message etc..
-
 export const inmateSchema = z.object({
   id: z.number().int().min(1).optional(),
   firstName: z.string().min(2),
@@ -37,6 +35,7 @@ export const userSchema = z.object({
   lastName: z.string().min(2).optional(),
   email: z.string().email(),
   password: z.string().min(1),
+  role: z.string().optional(),
   token: z.string().min(1).optional(),
   refreshToken:z.string().min(1).optional()
 }) 

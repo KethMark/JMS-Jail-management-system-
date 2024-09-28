@@ -38,6 +38,7 @@ CREATE TABLE user (
   password VARCHAR(255) DEFAULT NULL,
   refreshToken VARCHAR(500) DEFAULT NULL,
   token VARCHAR(1000) DEFAULT NULL,
+  role ENUM('Admin', 'Guest', 'Visitor') NOT NULL DEFAULT 'Visitor',
   createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
   createdBy TIMESTAMP NOT NULL DEFAULT NOW()
 );

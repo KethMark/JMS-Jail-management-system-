@@ -2,12 +2,13 @@ import { pool } from "./config";
 import { RowDataPacket } from "mysql2";
 import { userSchema, validateUser } from "./schema/jms";
 
-interface User extends RowDataPacket {
+export interface User extends RowDataPacket {
   id: number;
   firstName: string;
   lastName: string;
   password: string;
   email: string;
+  role: string;
   refreshToken: string;
   token: string;
 }
@@ -66,6 +67,22 @@ export async function userUpdate(
     const users = await pool.query(
       "UPDATE user SET refreshToken = ?, token = ? WHERE id = ?",
       [refreshToken, token, id]
+    );
+    return users;
+  } catch (error) {
+    return {
+      error: `There's something wrong within ${error}`,
+    };
+  }
+}
+
+export async function userLogout(
+  id: string
+) {
+  try {
+    const users = await pool.query(
+      "UPDATE user SET refreshToken = '', token = '' WHERE id = ?",
+      [id]
     );
     return users;
   } catch (error) {
